@@ -1,0 +1,143 @@
+/* --- Importação das Fontes --- */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600&display=swap');
+
+/*
+  Paleta de Cores:
+  Verde Neon: #B4FF00
+  Preto: #111111
+  Cinza Fundo: #f5f5f5
+  Cinza Médio: #ccc
+  Branco: #ffffff
+*/
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #111; /* Mesmo cinza de fundo */
+    color: #111111;
+    
+    /* Layout para centralizar tudo */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+/* --- Logo (500px) --- */
+.container-logo {
+    width: 500px;
+    height: 200px;
+    background-image: url("unbound\ branco-Photoroom.png");
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-bottom: 20px;
+}
+
+.container-logo a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* --- Container Principal (Para centralizar o box) --- */
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 0.5; /* Ocupa o espaço restante */
+    padding-bottom: 50px; 
+}
+
+/* --- Formulário de Criação (O box branco) --- */
+.form-criar {
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    padding: 40px;
+    
+    max-width: 450px; /* Mesma largura do login */
+    width: 90%; 
+    
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espaçamento entre os itens */
+}
+
+.form-criar h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 1px;
+    text-align: center;
+    color: #111111;
+    margin-bottom: 10px;
+}
+
+/* --- Campos de Input --- */
+.form-criar input {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    width: 100%;
+    height: 50px;
+    padding: 0 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.form-criar input::placeholder {
+    color: #999;
+}
+
+.form-criar input:focus {
+    outline: none;
+    border-color: #B4FF00; /* Destaque verde neon */
+    box-shadow: 0 0 5px rgba(180, 255, 0, 0.5); /* Sombra neon */
+}
+
+/* --- Botão de Enviar --- */
+.form-criar button {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    color: #B4FF00; /* Texto verde neon */
+    background-color: #111111; /* Botão preto */
+    border: none;
+    border-radius: 5px;
+    height: 50px;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.form-criar button:hover {
+    background-color: #B4FF00; /* Inverte as cores no hover */
+    color: #111111;
+    transform: scale(1.02);
+}
+
+/* --- Link de Voltar (Fora do box) --- */
+.voltar-link {
+    font-size: 0.9rem;
+    color: #B4FF00;
+    text-decoration: none;
+    margin-top: 25px; /* Espaço acima do link */
+    transition: color 0.3s ease;
+    text-align: center; /* Centraliza o link */
+}
+
+.voltar-link:hover {
+    color: #B4FF00;
+    text-decoration: underline;
+}

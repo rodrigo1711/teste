@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="login.css">
+    <title>Login - Unbound Place</title>
+</head>
+
+<body>
+
+    <header>
+        <!--logo-->
+        <div class="container-logo"><a href="index.html"></a></div>
+        <!--Fim logo-->
+    </header>
+
+    <!-- Parte do login -->
+    <div class="container">
+        <form class="login" method="POST" action="login.php">
+            <h1>Login</h1>
+            <input type="email" id="email" name="email" aria-label="Digite seu e-mail" placeholder="Email" required>
+            <input type="password" id="senha" name="senha" aria-label="Digite sua senha" placeholder="Senha" required>
+            <button type="submit">Enviar</button>
+        </form>
+
+        <!-- caso tenha esquecido ou não tenha conta -->
+        <div class="criar">
+            <a href="recuperarSenha.html">Esqueci minha senha!</a>
+            <p>Crie sua conta <a href="crearConta.html">aqui</a></p>
+        </div>
+    </div>
+</body>
+</html>

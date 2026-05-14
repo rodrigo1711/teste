@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="recuperarSenha.css">
+    <title>Recuperar senha - Unbound Place</title>
+</head>
+
+<body>
+    <header>
+        <div class="container-logo"><a href="index.php"></a></div>
+    </header>
+
+    <div class="container">
+
+        <form class="recuperarSenha" action="recuperarSenha.php" method="POST">
+            <h1>Recuperar Senha</h1>
+            <p>Digite seu e-mail para **redefinir sua senha**.</p>
+            <input type="email" name="email" placeholder="Email" required>
+            <button type="submit">Enviar</button>
+        </form>
+
+        <a href="login.php" class="voltar-link">Voltar para o login</a>
+
+    </div>
+</body>
+
+</html>
