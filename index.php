@@ -193,19 +193,18 @@ $nome_usuario = $usuario_logado ? $_SESSION['usuario_nome'] : '';
                 </div>
             </div>
             
-                
-                    <?php if ($usuario_logado): ?>
-                <div class="menu"></div>
-                <div class="categorias"></div>
-                <button class="botao">dashboards</button>
+            <?php if ($usuario_logado): ?>
+                <div class="menu">
+                    <button class="botao">dashboards</button>
+                    <div class="categorias">
                         <a href="dashboard.php">Diretoria</a>
-                    <a href="dashboard-cliente.php">Cliente</a>
-                    </div> 
-                    <?php else: ?>
-                    
-                        <?php endif; ?>
-                
-            
+                        <a href="dashboard-cliente.php">Cliente</a>
+                    </div>
+                </div>
+                <div class="menu">
+                    <button class="botao" id="carrinho-btn">Carrinho (0)</button>
+                </div>
+            <?php endif; ?>
         
         <div class="perfil">
             <div class="perfil-btn"></div>
@@ -268,6 +267,15 @@ $nome_usuario = $usuario_logado ? $_SESSION['usuario_nome'] : '';
         </div>
     </div>
 
+    <div id="carrinho-modal" class="detalhe-modal" style="display:none;">
+        <div class="detalhe-content">
+            <button id="fechar-carrinho-btn">X</button>
+            <h2 style="width:100%; text-align:center; margin-bottom:20px;">Meu Carrinho</h2>
+            <div id="carrinho-itens" style="width:100%; max-width:700px; margin:0 auto;"></div>
+            <p id="carrinho-total" style="font-weight:700; margin-top:20px;"></p>
+        </div>
+    </div>
+
     <div class="filtro-container">
         <label for="filtro">Ordenar por:</label>
 
@@ -283,8 +291,52 @@ $nome_usuario = $usuario_logado ? $_SESSION['usuario_nome'] : '';
 
     <script>
         let produtos = [];
+        let carrinho = [];
+        let produtoAtual = null;
+
+        function atualizarCarrinhoUI() {
+            const btnCarrinho = document.getElementById('carrinho-btn');
+            if (btnCarrinho) {
+                btnCarrinho.textContent = `Carrinho (${carrinho.length})`;
+            }
+
+            const carrinhoItens = document.getElementById('carrinho-itens');
+            if (carrinhoItens) {
+                if (carrinho.length === 0) {
+                    carrinhoItens.innerHTML = '<p>Seu carrinho está vazio.</p>';
+                } else {
+                    carrinhoItens.innerHTML = carrinho.map(item => `
+                        <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 10px 10px 0; border-bottom:1px solid #ddd; gap:12px;">
+                            <div style="display:flex; align-items:center; gap:10px; flex:1; min-width:0;">
+                                <img src="${item.image}" alt="${item.title}" style="width:50px; height:50px; object-fit:contain; border:1px solid #ccc; border-radius:8px; background:#fff;" />
+                                <span style="font-size:0.95rem; line-height:1.2; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${item.title}</span>
+                            </div>
+                            <span style="font-weight:700; white-space:nowrap;">R$ ${item.price.toFixed(2)}</span>
+                        </div>
+                    `).join('');
+                }
+                const total = carrinho.reduce((soma, item) => soma + item.price, 0);
+                document.getElementById('carrinho-total').textContent = carrinho.length ? `Total: R$ ${total.toFixed(2)}` : '';
+            }
+        }
+
+        function abrirCarrinho() {
+            const carrinhoModal = document.getElementById('carrinho-modal');
+            if (!carrinhoModal) return;
+            atualizarCarrinhoUI();
+            carrinhoModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function fecharCarrinho() {
+            const carrinhoModal = document.getElementById('carrinho-modal');
+            if (!carrinhoModal) return;
+            carrinhoModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
 
         function mostrarDetalhes(produto) {
+            produtoAtual = produto;
             // Esconde elementos da página principal
             document.getElementById('produtos').style.display = 'none';
             document.getElementById('filtro').style.display = 'none';
@@ -343,6 +395,25 @@ $nome_usuario = $usuario_logado ? $_SESSION['usuario_nome'] : '';
 
         document.getElementById('voltar-btn').addEventListener('click', voltarLista);
 
+        const addCarrinhoBtn = document.getElementById('add-carrinho');
+        if (addCarrinhoBtn) {
+            addCarrinhoBtn.addEventListener('click', () => {
+                if (!produtoAtual) return;
+                carrinho.push(produtoAtual);
+                atualizarCarrinhoUI();
+                alert(`Produto adicionado: ${produtoAtual.title}`);
+            });
+        }
+
+        const btnCarrinho = document.getElementById('carrinho-btn');
+        if (btnCarrinho) {
+            btnCarrinho.addEventListener('click', abrirCarrinho);
+        }
+
+        const fecharCarrinhoBtn = document.getElementById('fechar-carrinho-btn');
+        if (fecharCarrinhoBtn) {
+            fecharCarrinhoBtn.addEventListener('click', fecharCarrinho);
+        }
 
         function renderizar(lista) { /* funcao declarada que recebe o parametro lista*/
             const div = document.getElementById("produtos"); /* elemento html id=produto e usa a variavel div*/

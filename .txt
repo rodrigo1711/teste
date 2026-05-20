@@ -1,0 +1,4 @@
+neste arquivo resolvi links 
+falta a logica de 6 caracteres no criar conta(logica do redefinir senha)
+email
+dash
