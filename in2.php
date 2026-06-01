@@ -1,13 +1,13 @@
 <?php
 // inicio do codigo php da sessao
+//
 session_start();
 
-
 // verifica se o ID do usuário esta setado na sessao
-$usuario_logado = isset($_SESSION['usuario_id']) && !empty($_SESSION['usuario_id']);
+$usuario_logado = isset($_SESSION['usuario_id']);
 
 // caso estiver logado pegamos o nome p exibir, caso contrário eh vazio
-$nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_SESSION['usuario_nome']) : '';
+$nome_usuario = $usuario_logado ? $_SESSION['usuario_nome'] : '';
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -227,8 +227,8 @@ $nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_S
     <div class="slider">
         <div class="slides">
             <img src="./IMG/Banner1.PNG.jpeg" class="slide" id="slide1">
-            <img src="./IMG/Banner2.PNG.jpeg" class="slide" id="slide2">
-            <img src="./IMG/Banner3.PNG.jpeg" class="slide" id="slide3">
+            <img src="./IMG/Banner2.PNG.jpeg" class="slide" id="slide1">
+            <img src="./IMG/Banner3.PNG.jpeg" class="slide" id="slide1">
         </div>
     </div>
 
@@ -272,15 +272,9 @@ $nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_S
             <button id="fechar-carrinho-btn">X</button>
             <h2 style="width:100%; text-align:center; margin-bottom:20px;">Meu Carrinho</h2>
             <div id="carrinho-itens" style="width:100%; max-width:700px; margin:0 auto;"></div>
-            <div id="comprar-wrapper" style="width:100%; max-width:700px; margin:18px auto 0; display:flex; justify-content:center; padding:12px; border-radius:14px; background: rgba(255, 255, 255, 0.95);">
-                <button id="comprar-todos-btn" type="button" style="background:#111; color:#fff; border:none; padding:14px 28px; border-radius:12px; cursor:pointer; font-weight:700; display:block;">Comprar</button>
-            </div>
-            <p id="carrinho-total" style="font-weight:700; margin-top:20px; text-align:center;"></p>
+            <p id="carrinho-total" style="font-weight:700; margin-top:20px;"></p>
         </div>
     </div>
-    <form id="compra-form" action="indie.php" method="post" style="display:none;">
-        <input type="hidden" name="produtos_comprados_json" id="produtos-comprados-json">
-    </form>
 
     <div class="filtro-container">
         <label for="filtro">Ordenar por:</label>
@@ -299,11 +293,6 @@ $nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_S
         let produtos = [];
         let carrinho = [];
         let produtoAtual = null;
-
-        function removerDoCarrinho(index) {
-            carrinho.splice(index, 1);
-            atualizarCarrinhoUI();
-        }
 
         function atualizarCarrinhoUI() {
             const btnCarrinho = document.getElementById('carrinho-btn');
@@ -325,7 +314,9 @@ $nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_S
                             </div>
                             <div style="display:flex; align-items:center; justify-content:space-between; gap: 10px;">
                                 <span style="font-weight:700; white-space:nowrap;">R$ ${item.price.toFixed(2)}</span>
+                                <button onclick="removerDoCarrinho(${index})" style="background:green; color:white; border:none; padding:6px 10px; border-radius:6px; cursor:pointer;"> Comprar </button>
                                 <button onclick="removerDoCarrinho(${index})" style="background:red; color:white; border:none; padding:6px 10px; border-radius:6px; cursor:pointer;"> Excluir </button>
+                                
                             </div>
                         </div>
 
@@ -334,13 +325,8 @@ $nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_S
                 const total = carrinho.reduce((soma, item) => soma + item.price, 0);
                 document.getElementById('carrinho-total').textContent = carrinho.length ? `Total: R$ ${total.toFixed(2)}` : '';
             }
-
-            const comprarTodosBtn = document.getElementById('comprar-todos-btn');
-            if (comprarTodosBtn) {
-                comprarTodosBtn.disabled = carrinho.length === 0;
-            }
         }
-        // base está no post, tentar reestilizar externamente
+//base está no post, tentar reestilizar externamente
         function abrirCarrinho() {
             const carrinhoModal = document.getElementById('carrinho-modal');
             if (!carrinhoModal) return;
@@ -354,18 +340,6 @@ $nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_S
             if (!carrinhoModal) return;
             carrinhoModal.style.display = 'none';
             document.body.style.overflow = 'auto';
-        }
-
-        function comprarTodos() {
-            if (carrinho.length === 0) {
-                alert('Seu carrinho está vazio.');
-                return;
-            }
-            const form = document.getElementById('compra-form');
-            const field = document.getElementById('produtos-comprados-json');
-            if (!form || !field) return;
-            field.value = JSON.stringify(carrinho);
-            form.submit();
         }
 
         function mostrarDetalhes(produto) {
@@ -441,11 +415,6 @@ $nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_S
         const btnCarrinho = document.getElementById('carrinho-btn');
         if (btnCarrinho) {
             btnCarrinho.addEventListener('click', abrirCarrinho);
-        }
-
-        const comprarTodosBtn = document.getElementById('comprar-todos-btn');
-        if (comprarTodosBtn) {
-            comprarTodosBtn.addEventListener('click', comprarTodos);
         }
 
         const fecharCarrinhoBtn = document.getElementById('fechar-carrinho-btn');

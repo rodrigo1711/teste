@@ -1,13 +1,13 @@
 <?php
 // inicio do codigo php da sessao
+//
 session_start();
 
-
 // verifica se o ID do usuário esta setado na sessao
-$usuario_logado = isset($_SESSION['usuario_id']) && !empty($_SESSION['usuario_id']);
+$usuario_logado = isset($_SESSION['usuario_id']);
 
 // caso estiver logado pegamos o nome p exibir, caso contrário eh vazio
-$nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_SESSION['usuario_nome']) : '';
+$nome_usuario = $usuario_logado ? $_SESSION['usuario_nome'] : '';
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -166,7 +166,7 @@ $nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_S
 
         <div class="navegacao">
             <div class="menu">
-                <button class="botao"></button>
+                <button class="botao">Categoria</button>
                 <div class="categorias">
                     <a href="#">Mais Vendidos</a>
                     <a href="#">teste2</a>
@@ -176,7 +176,7 @@ $nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_S
             </div>
 
             <div class="menu">
-                <button class="botao"></button>
+                <button class="botao">Filtro</button>
                 <div class="categorias">
                     <a href="#">Mais barato</a>
                     <a href="#">Mais caro</a>
@@ -184,9 +184,12 @@ $nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_S
             </div>
 
             <div class="menu">
-                <button class="botao"></button>
+                <button class="botao">Sobre</button>
                 <div class="categorias">
-                    <a href="#">documentação</a>
+                    <a href="#">teste1</a>
+                    <a href="#">teste2</a>
+                    <a href="#">teste3</a>
+                    <a href="#">teste4</a>
                 </div>
             </div>
             
@@ -202,8 +205,7 @@ $nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_S
                     <button class="botao" id="carrinho-btn">Carrinho (0)</button>
                 </div>
             <?php endif; ?>
-        </div>
-
+        
         <div class="perfil">
             <div class="perfil-btn"></div>
             <div class="dropdown">
@@ -227,8 +229,8 @@ $nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_S
     <div class="slider">
         <div class="slides">
             <img src="./IMG/Banner1.PNG.jpeg" class="slide" id="slide1">
-            <img src="./IMG/Banner2.PNG.jpeg" class="slide" id="slide2">
-            <img src="./IMG/Banner3.PNG.jpeg" class="slide" id="slide3">
+            <img src="./IMG/Banner2.PNG.jpeg" class="slide" id="slide1">
+            <img src="./IMG/Banner3.PNG.jpeg" class="slide" id="slide1">
         </div>
     </div>
 
@@ -256,12 +258,10 @@ $nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_S
                     <strong id="detalhe-preco"
                         style="display:block; font-size: 1.4rem; margin-bottom: 25px;">
                     </strong>
-                    <?php if ($usuario_logado): ?>
                     <button id="add-carrinho"
                         style="padding: 12px 28px; background-color: #111; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
                         Adicionar ao Carrinho
                     </button>
-                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -272,15 +272,9 @@ $nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_S
             <button id="fechar-carrinho-btn">X</button>
             <h2 style="width:100%; text-align:center; margin-bottom:20px;">Meu Carrinho</h2>
             <div id="carrinho-itens" style="width:100%; max-width:700px; margin:0 auto;"></div>
-            <div id="comprar-wrapper" style="width:100%; max-width:700px; margin:18px auto 0; display:flex; justify-content:center; padding:12px; border-radius:14px; background: rgba(255, 255, 255, 0.95);">
-                <button id="comprar-todos-btn" type="button" style="background:#111; color:#fff; border:none; padding:14px 28px; border-radius:12px; cursor:pointer; font-weight:700; display:block;">Comprar</button>
-            </div>
-            <p id="carrinho-total" style="font-weight:700; margin-top:20px; text-align:center;"></p>
+            <p id="carrinho-total" style="font-weight:700; margin-top:20px;"></p>
         </div>
     </div>
-    <form id="compra-form" action="indie.php" method="post" style="display:none;">
-        <input type="hidden" name="produtos_comprados_json" id="produtos-comprados-json">
-    </form>
 
     <div class="filtro-container">
         <label for="filtro">Ordenar por:</label>
@@ -300,11 +294,6 @@ $nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_S
         let carrinho = [];
         let produtoAtual = null;
 
-        function removerDoCarrinho(index) {
-            carrinho.splice(index, 1);
-            atualizarCarrinhoUI();
-        }
-
         function atualizarCarrinhoUI() {
             const btnCarrinho = document.getElementById('carrinho-btn');
             if (btnCarrinho) {
@@ -316,6 +305,7 @@ $nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_S
                 if (carrinho.length === 0) {
                     carrinhoItens.innerHTML = '<p>Seu carrinho está vazio.</p>';
                 } else {
+//===============lucas normal=========== adicionei boteoes q estao de funcionalidade
                     carrinhoItens.innerHTML = carrinho.map((item, index) => `
                         <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 10px 10px 0; border-bottom:1px solid #ddd; gap:12px;">
                             <div style="display:flex; align-items:center; gap:10px; flex:1; min-width:0;">
@@ -325,22 +315,20 @@ $nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_S
                             </div>
                             <div style="display:flex; align-items:center; justify-content:space-between; gap: 10px;">
                                 <span style="font-weight:700; white-space:nowrap;">R$ ${item.price.toFixed(2)}</span>
+                                <button onclick="removerDoCarrinho(${index})" style="background:green; color:white; border:none; padding:6px 10px; border-radius:6px; cursor:pointer;"> Comprar </button>
                                 <button onclick="removerDoCarrinho(${index})" style="background:red; color:white; border:none; padding:6px 10px; border-radius:6px; cursor:pointer;"> Excluir </button>
+                                
                             </div>
                         </div>
 
                     `).join('');
                 }
+//=======================fim====================
                 const total = carrinho.reduce((soma, item) => soma + item.price, 0);
                 document.getElementById('carrinho-total').textContent = carrinho.length ? `Total: R$ ${total.toFixed(2)}` : '';
             }
-
-            const comprarTodosBtn = document.getElementById('comprar-todos-btn');
-            if (comprarTodosBtn) {
-                comprarTodosBtn.disabled = carrinho.length === 0;
-            }
         }
-        // base está no post, tentar reestilizar externamente
+
         function abrirCarrinho() {
             const carrinhoModal = document.getElementById('carrinho-modal');
             if (!carrinhoModal) return;
@@ -349,6 +337,7 @@ $nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_S
             document.body.style.overflow = 'hidden';
         }
 
+        //========== fechar o carrinho dentro e fora do X=========
         function fecharCarrinho() {
             const carrinhoModal = document.getElementById('carrinho-modal');
             if (!carrinhoModal) return;
@@ -356,17 +345,16 @@ $nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_S
             document.body.style.overflow = 'auto';
         }
 
-        function comprarTodos() {
-            if (carrinho.length === 0) {
-                alert('Seu carrinho está vazio.');
-                return;
-            }
-            const form = document.getElementById('compra-form');
-            const field = document.getElementById('produtos-comprados-json');
-            if (!form || !field) return;
-            field.value = JSON.stringify(carrinho);
-            form.submit();
+        const carrinhoModal = document.getElementById('carrinho-modal');
+        if (carrinhoModal) {
+            carrinhoModal.addEventListener('click', function(event){
+                if (event.target === carrinhoModal){
+                    fecharCarrinho();
+                }
+            });
         }
+        //============fim======================
+
 
         function mostrarDetalhes(produto) {
             produtoAtual = produto;
@@ -443,30 +431,15 @@ $nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_S
             btnCarrinho.addEventListener('click', abrirCarrinho);
         }
 
-        const comprarTodosBtn = document.getElementById('comprar-todos-btn');
-        if (comprarTodosBtn) {
-            comprarTodosBtn.addEventListener('click', comprarTodos);
-        }
-
         const fecharCarrinhoBtn = document.getElementById('fechar-carrinho-btn');
         if (fecharCarrinhoBtn) {
             fecharCarrinhoBtn.addEventListener('click', fecharCarrinho);
         }
 
-        //========== fechar o carrinho dentro e fora do X=========
-        const carrinhoModal = document.getElementById('carrinho-modal');
-        if (carrinhoModal) {
-            carrinhoModal.addEventListener('click', function(event){
-                if (event.target === carrinhoModal){
-                    fecharCarrinho();
-                }
-            });
-        }
-
         function renderizar(lista) { /* funcao declarada que recebe o parametro lista*/
             const div = document.getElementById("produtos"); /* elemento html id=produto e usa a variavel div*/
-            div.innerHTML = ""; /*zera oq ja tinha dentro do div p evitar duplicar*/
-            lista.forEach(p => { /*laço p correr cada item da lista*/
+            div.innerHTML = ""; /zera oq ja tinha dentro do div p evitar duplicar/
+            lista.forEach(p => { /laço p correr cada item da lista/
                 const card = document.createElement('div');
                 card.className = 'produto-card';
                 card.innerHTML = `
@@ -479,15 +452,15 @@ $nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_S
             });
         }
 
-        fetch("https://fakestoreapi.com/products") /*fetch q serve p buscar os produto na API*/
-            .then(res => res.json()) /*transforma o array em obj*/
+        fetch("https://fakestoreapi.com/products") /fetch q serve p buscar os produto na API/
+            .then(res => res.json()) /transforma o array em obj/
             .then(data => {
                 produtos = data;
-                renderizar(produtos); /*mostra na tela tudo. obs: tem na doc esse trecho de codigo!!*/
+                renderizar(produtos); /mostra na tela tudo. obs: tem na doc esse trecho de codigo!!/
             });
 
-        document.getElementById("filtro").addEventListener("change", e => { /*pega o menu e adc o evento nele, evento change atv*/
-            let ordenado = [...produtos]; /*eh criado uma copia do array usando esse spread (...produtos)*/
+        document.getElementById("filtro").addEventListener("change", e => { /pega o menu e adc o evento nele, evento change atv/
+            let ordenado = [...produtos]; /eh criado uma copia do array usando esse spread (...produtos)/
             if (e.target.value === "menor") ordenado.sort((a, b) => a.price - b.price);
             /*esse "e" eh o evento que foi usado qnd o usuario mudou a opcao em select
              e.target eh o elemento que usou o evento sendo o <select>
@@ -552,7 +525,7 @@ $nome_usuario = ($usuario_logado && isset($_SESSION['usuario_nome'])) ? trim($_S
         </div>
 
         <div class="footer-bottom">
-            <p>© 2026 Unbound Place. Todos os direitos reservados.</p>
+            <p>© 2025 Unbound Place. Todos os direitos reservados.</p>
         </div>
     </footer>
 </body>

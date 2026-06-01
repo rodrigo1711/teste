@@ -21,7 +21,7 @@ $nome_usuario = isset($_SESSION['usuario_nome']) ? $_SESSION['usuario_nome'] : '
     <!--  a msm fonte que tem no site -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="index.css">
+<link rel="stylesheet" href="index.css">
     <style>
         /* aplicacao da fontr poppins na pag toda */
         body {

@@ -18,6 +18,11 @@ if (ini_get("session.use_cookies")) {
 // terceioro finalmente destroi a sessão
 session_destroy();
 
+// redirecionando para login
+header("Location: login.html");
+exit();
+?>
+
 // quarto redireciona o usuário p página inicial (index.php)
 header("Location: index.php?status=logout");
 exit;
